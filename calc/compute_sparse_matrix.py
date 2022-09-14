@@ -26,6 +26,9 @@ VALID_METRICS = ['canberra','cosine','manhattan','chebyshev','correlation','hamm
                  'jaccard','rogerstanimoto','spearman']
 VALID_OUTPUT_TYPE = ['SPARSE','FULL','SPARSE_PERCENT']
 
+# Set environment variable for sklp
+os.environ['JOBLIB_TEMP_FOLDER'] = '/tmp'
+
 def valid_metrics():
     return str(VALID_METRICS)
 
