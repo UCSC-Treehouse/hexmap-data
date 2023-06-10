@@ -25,6 +25,7 @@ def parse_args(args):
     return parser.parse_args(args)
 
 def topNeighbors(similarity, directory, topIn):
+    print("Running top neighbors")
     top = int(topIn)
     for i, file in enumerate(similarity.__iter__()):
         sims = []
@@ -32,7 +33,7 @@ def topNeighbors(similarity, directory, topIn):
         sims = list(csv.reader(fIn, delimiter='\t'))
         fIn.close()
     
-        with open(os.path.join(directory, 'neighbors_' + str(i) + '.tab'), 'w') as fOut:
+        with open(os.path.join(directory, 'neighbors_' + str(i) + '.tab'), 'w') as fOut: # typically neighbors0.tab
             fOut = csv.writer(fOut, delimiter='\t', lineterminator='\n')
             tops = [] # A place to store the top neighbors
             node0 = sims[0][0] # Save the first node name
@@ -60,8 +61,13 @@ def topNeighbors(similarity, directory, topIn):
     print timestamp(), 'Found top neighbors'
 
 def topNeighbors_from_sparse(sparse, out_directory, topIn, i):
+    print("Running topNeighbors from sparse")
     top = int(topIn)
-    #print sparse
+
+    with open(os.path.join(out_directory, "sparse_matrix.tab"), "w") as f:
+        f.write("Sample\tNeighbor\tCorrelation") # sparse starts with newline for some reason so borrow that
+        f.write(sparse)
+    print("saved sparse to file")
     
     elem_dict = {}
     elems = []
@@ -75,12 +81,16 @@ def topNeighbors_from_sparse(sparse, out_directory, topIn, i):
                 elems.append(line_elems[0])
     
     output = open(os.path.join(out_directory, 'neighbors_' + str(i) + '.tab'), 'w')
+    # make header string
+    header = "Focus_sample"
+    header += "".join(map(lambda x: "\tMCS_" + str(x+1), range(top))) # eg \tMCS_1\tMCS_2\tMCS_3 etc
+    print >> output, header
     for e in elems:
         if len(elem_dict[e]) < top:
             this_top = len(elem_dict[e])
         else:
             this_top = top
-        print >> output, "\t".join(elem_dict[e][0:this_top])
+        print >> output, e + "\t" + "\t".join(elem_dict[e][0:this_top]) # include the self-sample in each row
     
     output.close()
     
