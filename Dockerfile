@@ -1,8 +1,8 @@
 FROM ucschexmap/compute@sha256:05bcd6135022ebe6f851730a25a2c46fba89deebdaa6cd14d58797abd48efff5
 
 # Set up hexmap user
-RUN groupadd -g 2000 hexdocker 
-RUN useradd hexmap -u 1478 -g 2000 -m -s /bin/bash
+RUN groupadd -g 1304 hexdocker
+RUN useradd hexmap -u 30056 -g 1304 -m -s /bin/bash
 # Remove legacy app dir
 RUN rm -r /usr/src/app
 # Make the parent directory for the jobQueue sqlite DB, owned by hexmap
