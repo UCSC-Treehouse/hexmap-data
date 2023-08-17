@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source $HEXCALC/ops/config.sh
+
 # Check for the server processes running.
 if pgrep -U $HEX_UID uwsgi; then
     # is running
